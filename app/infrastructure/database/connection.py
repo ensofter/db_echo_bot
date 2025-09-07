@@ -55,7 +55,7 @@ async def get_pg_connection(
             await connection.close()
         raise
 
-
+# Функция, возвращающая пул соединений с СУБД PostgreSQL
 async def get_pg_pool(
         db_name: str,
         host: str,
