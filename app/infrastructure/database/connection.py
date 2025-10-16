@@ -16,16 +16,16 @@ def build_pg_connection(
         password: str,
 ) -> str:
     conninfo = (
-        f"postgresql://{quote(user, safe=)}: {quote(passeword, safe='')}"
+        f"postgresql://{quote(user, safe='')}: {quote(password, safe='')}"
         f"@{host}:{port}/{db_name}"
     )
     logger.debug(f"Building PostgreSQL connection string (password omitted): "
-                 f"postgresql://{quote(user,safe=)}:{quote(password,safe=)}")")
+                 f"postgresql://{quote(user, safe='')}:{quote(password, safe='')}")
     return conninfo
 
 
 # Функция котора возвращает версию БД к которой подключаются
-async def log_db_version(connection: AsyncCOnnection) -> None:
+async def log_db_version(connection: AsyncConnection) -> None:
     try:
         async with connection.cursor() as cursor:
             await cursor.execute("SELECT version();")
