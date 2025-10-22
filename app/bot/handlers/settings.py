@@ -96,3 +96,27 @@ async def process_save_click(
     )
     await state.update_data(lang_settings_msg_id=None, user_lang=None)
     await state.set_state()
+
+
+# Этот хэндлер будет срабатывать на нажатие кнопки "Отмена" в режиме настроек языка
+@settings_router.callback_query(F.data == "cancel_lang_button_data")
+async def process_cancel_click(
+        callback: CallbackQuery,, conn: AsyncConnection, i18n: dict[str, str],
+        state: FSMContext,
+):
+    user_lang = await get_user_lang(conn, user_id=callback.from_user.id)
+    await callback.message.edit_text(text=i18n.get("lang_canceled").format(i18n.get(user_lang)))
+    await state.update_data(lang_settings_msg_id=None, user_lang=None)
+    await state.set_state()
+
+
+# Этот хэндлер будет срабатывать на нажатие любой радио-кнопки с локалью в режиме насроек языка интерфейса
+@settings_router.callback_query(LocaleFilter())
+async def process_lang_click(callback: CallbackQuery, i18n: dict[str, str], locales: list[str]):
+    try:
+        await callback.message.edit_text(
+            text=i18n.get("/lang"),
+            reply_markup=get_lang_settings_kb(i18n=i18n, lovales=locales, checked=callback.data)
+        )
+    except TelegramBadRequest:
+        await callback.answer()
