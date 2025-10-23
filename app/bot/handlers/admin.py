@@ -29,7 +29,7 @@ async def process_admin_help_command(message: Message, i18n: dict):
 
 
 # Это хендлер будет срабатывать на команду /statistics для пользователя с ролью `UserRole.ADMIN`
-@admin_router.message(Command('statstics'))
+@admin_router.message(Command('statistics'))
 async def process_admin_statistics_command(message: Message, conn: AsyncConnection, i18n: dict[str, str]):
     statistics = await get_statistics(conn)
     await message.answer(
